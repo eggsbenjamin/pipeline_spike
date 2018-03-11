@@ -116,7 +116,7 @@ Prior to this though, to mitigate the potential for a large volume of retries in
 
 For `Catcher` retries (before recursively calling itself), the `IntervalSeconds` is set to 2, the `MaxAttempts`is set to 10 and the `BackOffRate` to 2.0.
 
-This would mean that in the event of an error the `Catcher` would retry itself at the following intervals [2^2, 2^3, 2^4, 2^5, 2^6, 2^7, 2^8, 2^9, 2^10] seconds.
+This would mean that in the event of an error the `Catcher` would retry itself at the following intervals [2, 2^2, 2^3, 2^4, 2^5, 2^6, 2^7, 2^8, 2^9, 2^10] seconds.
 
 After this the process would begin again. In the mean time alerts have been issued and fixes can be put in to allow data to be put back on to the kinesis stream.
  
