@@ -163,7 +163,7 @@ The [Step Function docs](https://docs.aws.amazon.com/step-functions/latest/dg/li
 
 An example of the pipeline outlined above has been created in this repo.
 
-###### Set Up
+##### Set Up
 
 - `dep ensure` (install deps - needed to build lambdas)
 - `make lambda` (build lambdas - needed to build pipeline)

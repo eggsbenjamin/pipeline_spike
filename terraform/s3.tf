@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "pipeline_spike_orphan_bucket" {
-  bucket = "pipeline-spike-orphan-bucket"
+  bucket = "${var.bucket_name_prefix}-pipeline-spike-orphan-bucket"
   acl    = "private"
 
   tags {
@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "pipeline_spike_orphan_bucket" {
 }
 
 resource "aws_s3_bucket" "pipeline_spike_valid_bucket" {
-  bucket = "pipeline-spike-valid-bucket"
+  bucket = "${var.bucket_name_prefix}-pipeline-spike-valid-bucket"
   acl    = "private"
 
   tags {
@@ -19,7 +19,7 @@ resource "aws_s3_bucket" "pipeline_spike_valid_bucket" {
 }
 
 resource "aws_s3_bucket" "pipeline_spike_error_bucket" {
-  bucket = "pipeline-spike-error-bucket"
+  bucket = "${var.bucket_name_prefix}-pipeline-spike-error-bucket"
   acl    = "private"
 
   tags {

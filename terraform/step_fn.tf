@@ -136,7 +136,7 @@ resource "aws_sfn_state_machine" "pipeline_spike_step_fn" {
           "ErrorEquals": [
             "States.ALL"
           ],
-          "IntervalSeconds": 1,
+          "IntervalSeconds": 2,
           "BackoffRate": 2.0,
           "MaxAttempts": 10
         }
