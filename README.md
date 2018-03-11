@@ -27,6 +27,8 @@ The current implementation ensures that no data is lost as it blocks on error. A
 
 This methodology would improve the performance of the pipeline, allowing for higher throughput, while also ensuring no data loss.
 
+The [Step Function docs](https://docs.aws.amazon.com/step-functions/latest/dg/limits.html) state that the maximum number of running (open) executions is 1000000.
+
 The only time that the pipeline will block is if the step function cannot be invoked.
 
 ### Implementation
@@ -183,4 +185,32 @@ e.g.
 - `aws kinesis put-record --stream-name pipeline_spike_stream --data '{ "id" : "12345", "country_code" : "PANIC" }' --partition-key test`
   - This triggers the unexpected error path. The item will be retired until it reaches the maximum retries, at which point it will be written to the orphan bucket by the invoker.
   ![Orphan Order Execution](./images/orphan.png)
+
+##### Simulating Catcher Error
+
+To simulate a `Catcher` error (i.e. unable to put an item on to the kinesis stream) revoke it's `PutRecord` permissions by commenting them out in *terraform/lambdas.tf* and then re-building the pipeline.
+
+You should see this (below) in the step function console for up to 2^10 seconds (~17m04s) as the retries are attempted.
+
+![Catcher Retry](./images/catcher_retry.png)
+
+Uncomment the `PutRecord` permissions in *terraform/lambdas.tf* to simulate a fix being put in and the pipeline will continue execution and eventually put the item into the orphan bucket.
+
+## Conclusion
+
+### Performance
+
+It's still inconclusive because this pattern is yet to be applied to and benchmarked on the existing pipeline and then compared to old benchmarks.
+
+It stands to reason that by running the step functions asynchronously pipeline throughput can be increased significantly.
+
+Items can be taken from the stream at a speed inline with how long it takes to invoke a step function rather than wait for the poller.
+
+This pattern would mean that the pipeline wouldn't block as it currently does.
+
+### Data Loss
+
+This method cannot guarantee no data loss as step function max execution time is one year but this is only relevant for issue involving not being to put items back on to the kinesis stream. In my opinion this is ample time to address any issues related to this.
+
+For other errors this pattern will infinitely loop an item through the step function and won't be affected by the one year limit. Because of the infinite loop it makes sense to set a condition for exiting the loop i.e `MAX_ATTEMPTS`.
 
