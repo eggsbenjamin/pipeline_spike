@@ -167,7 +167,7 @@ An example of the pipeline outlined above has been created in this repo.
 
 - `dep ensure` (install deps - needed to build lambdas)
 - `make lambda` (build lambdas - needed to build pipeline)
-- `cd terraform && terraform apply` (build pipeline - note you may have to change bucket names as these have to be globally unique!)
+- `cd terraform && terraform apply` (build pipeline)
 - `cd terraform && terraform destroy` (destroy pipeline)
 
 Different behaviour can be observed by putting different data on to the kinesis stream using the [AWS CLI](https://aws.amazon.com/cli).
